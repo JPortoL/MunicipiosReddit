@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Municipios</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: #008080;
+        }
+
+        #map {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* Agrega estilos adicionales según sea necesario */
+    </style>
+</head>
+<body>
+    <h1>Mapa</h1>
+    <!-- Aquí está embebido el mapa -->
+    <div id="map">
+        {% include 'mapa.html' %}
+    </div>
+</body>
+</html>

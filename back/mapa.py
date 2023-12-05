@@ -58,4 +58,4 @@ fig.update_traces(
 
 """## Exportar en html"""
 
-pyo.plot(fig, filename='../MUNICIPIOSREDDIT/front/Mapa.html')
+pyo.plot(fig, filename='../MUNICIPIOSREDDIT/templates/Mapa.html')
