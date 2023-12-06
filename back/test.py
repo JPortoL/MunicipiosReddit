@@ -25,7 +25,8 @@ def cambiador_color(data_geo, df_eliminados):
                     municipio, departamento = municipio.split(", ")
                     municipio_upper = municipio.upper()
                     data = data_geo.loc[(data_geo['MPIO_CNMBR'].str.upper() == municipio_upper) & (data_geo["DPTO_CCDGO"] == DEPARTAMENTOS[departamento.title()]), 'COLOR']
-                    if data.values[0] == 1:
+                    
+                    if data.values.size > 0 and data.values[0] == 1:
                         print(municipio, "ya había sido eliminado")
                     data_geo.loc[(data_geo['MPIO_CNMBR'].str.upper() == municipio_upper) & (data_geo["DPTO_CCDGO"] == DEPARTAMENTOS[departamento.title()]), 'COLOR'] = 1
                 elif pd.notna(municipio):
