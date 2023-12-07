@@ -49,7 +49,7 @@ def guardar_geodataframe_como_geojson(gdf, ruta_archivo):
     gdf.to_file(ruta_archivo, driver='GeoJSON')
 
 if __name__ == "__main__":
-    file_path = "../MUNICIPIOSREDDIT/dataset/MunicipiosVeredas2MB.json"
+    file_path = "../MUNICIPIOSREDDIT/dataset/MunicipiosVeredas_2MB.json"
     link_eliminados = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRwZO7dV-5-s9J2op0T2ZZCrJ2yJ27keeGRBCYrlMa91Bwf2pt2mFbaHCDoFlx2_sziGQ8J_tfbKnFQ/pub?gid=0&single=true&output=csv"
 
     data_geo = load_geodata(file_path)
@@ -61,6 +61,6 @@ if __name__ == "__main__":
 
     data_geo_filtered = cambiador_color(data_geo, df_eliminados)
     guardar_geodataframe_como_geojson(data_geo_filtered, "../MUNICIPIOSREDDIT/dataset/MunicipiosModificados2.geojson")
-    print(data_geo_filtered.head())
+    #print(data_geo_filtered.head())
     fig, ax = plot_colored_map(data_geo_filtered, 3)
     plt.show()
