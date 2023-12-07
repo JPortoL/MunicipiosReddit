@@ -1,8 +1,7 @@
 import pandas as pd
-import plotly.graph_objs as go
+import folium
+from folium import Choropleth, GeoJson
 import geopandas as gpd
-import plotly.offline as pyo
-import json
 from Constantes import DEPARTAMENTOS_INVERTIDO
 
 """## Importar json con las ubicaciones"""
@@ -17,7 +16,7 @@ def encontrar_llave(diccionario, valor_buscado):
 geojson_path = "../MUNICIPIOSREDDIT/dataset/MunicipiosModificados2.geojson"
 
 with open(geojson_path, 'r', encoding='utf-8') as geojson_file:
-        geojson__ = json.load(geojson_file)
+    geojson_data = json.load(geojson_file)
     # Aquí puedes trabajar con el objeto GeoJSON
 
 """## Cargar base de datos"""
@@ -32,31 +31,28 @@ df = pd.DataFrame({
     "CDGNOMB": gdf["MPIO_CNMBR"] + ", " + gdf["DPTO_CCDGO"].map(DEPARTAMENTOS_INVERTIDO),
     "COLOR": gdf["COLOR"]
 })
-for loc in geojson__["features"]:
-    loc["id"] = loc["properties"]["MPIO_CNMBR"] + ", " + DEPARTAMENTOS_INVERTIDO[loc["properties"]["DPTO_CCDGO"]] 
+
 # Ahora puedes usar directamente la geometría en formato GeoJSON
-fig = go.Figure(
-    go.Choroplethmapbox(
-        geojson=geojson__,
-        locations=df['CDGNOMB'],
-        z=df['COLOR'],
-        colorscale="Greens",
-        reversescale=True,
-        showscale=False
-        )
-    )
+m = folium.Map(location=[4.570868, -74.2973328], zoom_start=3.4)
 
-fig.update_layout(
-    mapbox_zoom=3.4,
-    mapbox_center = {"lat": 4.570868, "lon": -74.2973328}
-    )
+Choropleth(
+    geo_data=geojson_data,
+    name='choropleth',
+    data=df,
+    columns=['CDGNOMB', 'COLOR'],
+    key_on='feature.properties.MPIO_CNMBR',
+    fill_color='Greens',
+    fill_opacity=0,
+    line_opacity=0.2,
+    line_color='black',
+    line_weight=0.1,
+    legend_name='Estado'
+).add_to(m)
 
-fig.update_traces(
-    hovertemplate="<br>%{location}</br>" +
-                  "Estado: %{text}",
-    text=df['COLOR'].apply(lambda x: "ELIMINADO" if x == 1 else "CON VIDA"),
-)
+# Agregar etiquetas
+for loc in geojson_data["features"]:
+    loc["id"] = loc["properties"]["MPIO_CNMBR"] + ", " + DEPARTAMENTOS_INVERTIDO[loc["properties"]["DPTO_CCDGO"]]
+    GeoJson(loc["geometry"], name=loc["id"]).add_to(m)
 
-"""## Exportar en html"""
-
-pyo.plot(fig, filename='../MUNICIPIOSREDDIT/templates/Mapa.html')
+# Mostrar el mapa
+m.save('../MUNICIPIOSREDDIT/templates/Mapa.html')
